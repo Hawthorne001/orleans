@@ -280,6 +280,10 @@ namespace Orleans.Serialization
 
         public bool CanSerialize<T>() { throw null; }
 
+        public T Deserialize<T>(Buffers.ArcBuffer source, Session.SerializerSession session) { throw null; }
+
+        public T Deserialize<T>(Buffers.ArcBuffer source) { throw null; }
+
         public T Deserialize<T>(Buffers.PooledBuffer.BufferSlice source, Session.SerializerSession session) { throw null; }
 
         public T Deserialize<T>(Buffers.PooledBuffer.BufferSlice source) { throw null; }
@@ -387,6 +391,10 @@ namespace Orleans.Serialization
         public Serializer(Codecs.IFieldCodec<T> codec, Session.SerializerSessionPool sessionPool) { }
 
         public Serializer(Session.SerializerSessionPool sessionPool) { }
+
+        public T Deserialize(Buffers.ArcBuffer source, Session.SerializerSession session) { throw null; }
+
+        public T Deserialize(Buffers.ArcBuffer source) { throw null; }
 
         public T Deserialize(Buffers.PooledBuffer.BufferSlice source, Session.SerializerSession session) { throw null; }
 
@@ -810,6 +818,19 @@ namespace Orleans.Serialization.Buffers
         public void Write(System.ReadOnlySpan<byte> value) { }
     }
 
+    public readonly partial struct ArcBufferWriterWrapper : System.Buffers.IBufferWriter<byte>
+    {
+        private readonly object _dummy;
+        private readonly int _dummyPrimitive;
+        public ArcBufferWriterWrapper(ArcBufferWriter bufferWriter) { }
+
+        public readonly void Advance(int count) { }
+
+        public readonly System.Memory<byte> GetMemory(int sizeHint = 0) { throw null; }
+
+        public readonly System.Span<byte> GetSpan(int sizeHint = 0) { throw null; }
+    }
+
     public static partial class BufferWriterExtensions
     {
         public static Writer<TBufferWriter> CreateWriter<TBufferWriter>(this TBufferWriter buffer, Session.SerializerSession session)
@@ -948,6 +969,8 @@ namespace Orleans.Serialization.Buffers
 
     public static partial class Reader
     {
+        public static Reader<Adaptors.ArcBufferReaderInput> Create(ArcBuffer input, Session.SerializerSession session) { throw null; }
+
         public static Reader<Adaptors.BufferSliceReaderInput> Create(PooledBuffer input, Session.SerializerSession session) { throw null; }
 
         public static Reader<Adaptors.BufferSliceReaderInput> Create(PooledBuffer.BufferSlice input, Session.SerializerSession session) { throw null; }
@@ -1065,6 +1088,8 @@ namespace Orleans.Serialization.Buffers
 
     public static partial class Writer
     {
+        public static Writer<ArcBufferWriterWrapper> Create(ArcBufferWriter destination, Session.SerializerSession session) { throw null; }
+
         public static Writer<Adaptors.SpanBufferWriter> Create(byte[] output, Session.SerializerSession session) { throw null; }
 
         public static Writer<Adaptors.MemoryStreamBufferWriter> Create(System.IO.MemoryStream destination, Session.SerializerSession session) { throw null; }
@@ -1147,6 +1172,13 @@ namespace Orleans.Serialization.Buffers
 
 namespace Orleans.Serialization.Buffers.Adaptors
 {
+    public partial struct ArcBufferReaderInput
+    {
+        private object _dummy;
+        private int _dummyPrimitive;
+        public ArcBufferReaderInput(in ArcBuffer slice) { }
+    }
+
     public partial struct ArrayStreamBufferWriter : System.Buffers.IBufferWriter<byte>
     {
         private object _dummy;
