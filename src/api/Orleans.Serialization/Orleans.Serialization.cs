@@ -836,6 +836,19 @@ namespace Orleans.Serialization.Buffers
         public readonly System.Span<byte> GetSpan(int sizeHint = 0) { throw null; }
     }
 
+    public readonly partial struct ArcBufferWriterWrapper : System.Buffers.IBufferWriter<byte>
+    {
+        private readonly object _dummy;
+        private readonly int _dummyPrimitive;
+        public ArcBufferWriterWrapper(ArcBufferWriter bufferWriter) { }
+
+        public readonly void Advance(int count) { }
+
+        public readonly System.Memory<byte> GetMemory(int sizeHint = 0) { throw null; }
+
+        public readonly System.Span<byte> GetSpan(int sizeHint = 0) { throw null; }
+    }
+
     public static partial class BufferWriterExtensions
     {
         public static Writer<TBufferWriter> CreateWriter<TBufferWriter>(this TBufferWriter buffer, Session.SerializerSession session)
